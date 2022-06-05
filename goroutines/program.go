@@ -40,7 +40,7 @@ func After() {
 		}(id)
 		go func(id int) {
 			if b, ok := queryDatabase(id); ok {
-				// cache[id] = b
+				cache[id] = b
 				fmt.Println("from database")
 				fmt.Println(b)
 			}
