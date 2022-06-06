@@ -1,4 +1,4 @@
-package waitgroups
+package rwmutexes
 
 import (
 	"fmt"
@@ -9,26 +9,29 @@ import (
 )
 
 func Run() {
-	fmt.Println("<<< RUN WAIT GROUPS >>>")
+	fmt.Println("<<< RUN READ/WRITE MUTEXES >>>")
 	wg := &sync.WaitGroup{}
+	m := &sync.RWMutex{}
 	for i := 0; i < 10; i++ {
 		id := entities.Rnd.Intn(10) + 1
 		wg.Add(2)
-		go func(id int, wg *sync.WaitGroup) {
-			if b, ok := entities.QueryCache(id); ok {
+		go func(wg *sync.WaitGroup, m *sync.RWMutex) {
+			if b, ok := entities.QueryCacheRWMutex(id, m); ok {
 				fmt.Println("from cache")
 				fmt.Println(b)
 			}
 			wg.Done()
-		}(id, wg)
-		go func(id int, wg *sync.WaitGroup) {
+		}(wg, m)
+		go func(wg *sync.WaitGroup, m *sync.RWMutex) {
 			if b, ok := entities.QueryDatabase(id); ok {
 				fmt.Println("from database")
+				m.Lock()
 				entities.Cache[id] = b
+				m.Unlock()
 				fmt.Println(b)
 			}
 			wg.Done()
-		}(id, wg)
+		}(wg, m)
 		time.Sleep(150 * time.Millisecond)
 	}
 

@@ -109,3 +109,10 @@ func QueryCacheMutex(id int, m *sync.Mutex) (Book, bool) {
 	m.Unlock()
 	return b, ok
 }
+
+func QueryCacheRWMutex(id int, m *sync.RWMutex) (Book, bool) {
+	m.RLock()
+	b, ok := Cache[id]
+	m.RUnlock()
+	return b, ok
+}

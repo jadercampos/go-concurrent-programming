@@ -9,6 +9,7 @@ import (
 )
 
 func Run() {
+	fmt.Println("<<< RUN MUTEXES >>>")
 	wg := &sync.WaitGroup{}
 	m := &sync.Mutex{}
 	for i := 0; i < 10; i++ {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/jadercampos/go-concurrent-programming/goroutines"
 	"github.com/jadercampos/go-concurrent-programming/mutexes"
+	"github.com/jadercampos/go-concurrent-programming/rwmutexes"
 	"github.com/jadercampos/go-concurrent-programming/waitgroups"
 )
 
@@ -23,6 +24,8 @@ func main() {
 				waitgroups.Run()
 			case "4":
 				mutexes.Run()
+			case "5":
+				rwmutexes.Run()
 			default:
 				fmt.Println("Exercício informado inválido, apenas opções de 1 a 9")
 			}

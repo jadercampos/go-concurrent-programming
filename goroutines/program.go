@@ -8,7 +8,7 @@ import (
 )
 
 func Before() {
-	fmt.Println("<<< BEFORE >>>")
+	fmt.Println("<<< RUN GO ROUTINES - BEFORE >>>")
 	for i := 0; i < 10; i++ {
 		id := entities.Rnd.Intn(10) + 1
 		if b, ok := entities.QueryCache(id); ok {
@@ -27,7 +27,7 @@ func Before() {
 	}
 }
 func After() {
-	fmt.Println("<<< AFTER >>>")
+	fmt.Println("<<< RUN GO ROUTINES - AFTER >>>")
 	for i := 0; i < 10; i++ {
 		id := entities.Rnd.Intn(10) + 1
 		go func(id int) {
