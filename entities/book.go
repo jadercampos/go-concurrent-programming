@@ -1,6 +1,14 @@
-package goroutines
+package entities
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"sync"
+	"time"
+)
+
+var Cache = map[int]Book{}
+var Rnd = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 type Book struct {
 	ID            int
@@ -16,7 +24,7 @@ func (b Book) String() string {
 			"Published:\t%v\n", b.Title, b.Author, b.YearPublished)
 }
 
-var books = []Book{
+var Books = []Book{
 	{
 		ID:            1,
 		Title:         "The Hitchhiker's Guide to the Galaxy",
@@ -77,4 +85,27 @@ var books = []Book{
 		Author:        "John Scalzi",
 		YearPublished: 2006,
 	},
+}
+
+func QueryCache(id int) (Book, bool) {
+	b, ok := Cache[id]
+	return b, ok
+}
+
+func QueryDatabase(id int) (Book, bool) {
+	time.Sleep(100 * time.Millisecond)
+	for _, b := range Books {
+		if b.ID == id {
+			return b, true
+		}
+	}
+
+	return Book{}, false
+}
+
+func QueryCacheMutex(id int, m *sync.Mutex) (Book, bool) {
+	m.Lock()
+	b, ok := Cache[id]
+	m.Unlock()
+	return b, ok
 }
